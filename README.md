@@ -1,6 +1,6 @@
-# NuzProjects Userplugins
+# Nuz & Denji Userplugins
 
-A collection of custom Vencord userplugins created by **NuzFlameV2**.
+A collection of custom Vencord userplugins created by **NuzFlameV2 and ItsDenji777**.
 
 These plugins are designed to add useful quality-of-life improvements to Discord while remaining lightweight, configurable, and easy to install.
 
@@ -114,4 +114,4 @@ All plugins in this repository are licensed under the **GNU General Public Licen
 ---
 Updated `July 25, 2026`
 
-Created with ❤️ by **NuzFlameV2**
+Created with ❤️ by **NuzFlameV2 and ItsDenji777**
