@@ -114,4 +114,4 @@ All plugins in this repository are licensed under the **GNU General Public Licen
 ---
 Updated `July 25, 2026`
 
-Created with ❤️ by **NuzFlameV2 and ItsDenji777**
+Created with 💙💜 by **NuzFlameV2 and ItsDenji777**
