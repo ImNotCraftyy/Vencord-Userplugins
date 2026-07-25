@@ -10,7 +10,7 @@ These plugins are designed to add useful quality-of-life improvements to Discord
 
 1. Clone or download this repository.
 2. Copy the desired plugin folder into:
--# If you are using Equicord, it is the exact same, the folder will just be called Equicord.
+**If you are using Equicord, it is the exact same, the folder will just be called Equicord.**
 
 ```text
 Vencord/src/userplugins/
@@ -34,7 +34,7 @@ User Settings → Vencord → Plugins
 
 ## Plugins
 
-### 📁 hideChatIcons
+### Hide Chat Icons
 
 Hide any button in Discord's message composer.
 
@@ -44,9 +44,6 @@ Hide any button in Discord's message composer.
 - Hide buttons added by other Vencord plugins
 - Gift and Apps hidden by default
 - Configure everything directly from Vencord Settings
-- Automatically detects plugin chat buttons
-- Preserves proper icon spacing
-- Uses Vencord's native plugin-button settings
 
 #### Discord Buttons
 
@@ -61,9 +58,10 @@ Hide any button in Discord's message composer.
 
 ---
 
-### 📁 mathCount
+### mathCount
 
 Generate extremely long randomized math expressions for Discord counting servers.
+*This requires the counting setup to have math enabled!*
 
 #### Features
 
@@ -94,20 +92,13 @@ Generate extremely long randomized math expressions for Discord counting servers
 
 ---
 
-## Planned Plugins
-
-Some plugins currently being developed include:
-
-- AssetCache
-- Markdown Preview
-- Better Animations
-- Auto Super Reactions
-
+## There will be more plugins coming soon!
 ---
 
 ## Compatibility
 
 These plugins are intended for recent versions of **Vencord** and **Discord Desktop**.
+***This also supports all modifications of Vencord such as Equicord***
 
 Discord occasionally changes its interface, so updates may be required after major Discord releases.
 
@@ -115,8 +106,8 @@ Discord occasionally changes its interface, so updates may be required after maj
 
 ## License
 
-All plugins in this repository are licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)** unless otherwise stated.
+All plugins in this repository are licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**
 
 ---
-
+Updated `July 25, 2026`
 Created with ❤️ by **NuzFlameV2**
