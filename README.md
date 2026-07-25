@@ -3,6 +3,7 @@
 A collection of custom Vencord userplugins created by **NuzFlameV2**.
 
 These plugins are designed to add useful quality-of-life improvements to Discord while remaining lightweight, configurable, and easy to install.
+**Report all errors in [Issues](https://github.com/NuzProjects/Vencord-Userplugins-List/issues)
 
 ---
 
