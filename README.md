@@ -3,7 +3,8 @@
 A collection of custom Vencord userplugins created by **NuzFlameV2**.
 
 These plugins are designed to add useful quality-of-life improvements to Discord while remaining lightweight, configurable, and easy to install.
-**Report all errors in [Issues](https://github.com/NuzProjects/Vencord-Userplugins-List/issues)
+
+**Report all errors in [Issues](https://github.com/NuzProjects/Vencord-Userplugins-List/issues)**
 
 ---
 
@@ -12,7 +13,7 @@ These plugins are designed to add useful quality-of-life improvements to Discord
 1. Clone or download this repository.
 2. Copy the desired plugin folder into:
 
-**If you are using Equicord, it is the exact same, the folder will just be called Equicord.**
+**If you are using Equicord, it is the same; the folder will just be called Equicord.**
 
 ```text
 Vencord/src/userplugins/
