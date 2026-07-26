@@ -1,575 +1,792 @@
 /*
- * hideChatIcons - Vencord Userplugin
+ * mathCounter - Vencord Userplugin
  * Created by NuzFlameV2
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { ChatBarButtonMap } from "@api/ChatButtons";
 import {
-    definePluginSettings,
-    useSettings
-} from "@api/Settings";
-import { FormSwitch } from "@components/FormSwitch";
-import definePlugin, { OptionType } from "@utils/types";
+    ChatBarButton,
+    ChatBarButtonFactory
+} from "@api/ChatButtons";
 import {
-    Button,
-    Forms,
-    React,
-    Text,
-    useEffect,
-    useState
+    ApplicationCommandInputType,
+    sendBotMessage
+} from "@api/Commands";
+import { definePluginSettings } from "@api/Settings";
+import { sendMessage } from "@utils/discord";
+import definePlugin, {
+    IconComponent,
+    OptionType
+} from "@utils/types";
+import {
+    MessageStore,
+    UserStore
 } from "@webpack/common";
 
-type BuiltInId =
-    | "gift"
-    | "apps"
-    | "gif"
-    | "stickers"
-    | "emoji"
-    | "upload"
-    | "voice"
-    | "poll";
-
-const STYLE_ID = "vc-hide-chat-icons-style";
-const MANAGED_ATTRIBUTE =
-    "data-vc-hide-chat-icons-managed";
-
-const STYLE = `
-[${MANAGED_ATTRIBUTE}="hidden"] {
-    display: none !important;
-}
-
-/* Add comfortable spacing without changing click targets. */
-[class*="channelTextArea"] [class*="buttons"] {
-    column-gap: 6px !important;
-}
-
-.vc-chatbar-button {
-    margin: 0 !important;
-}
-`;
-
-let observer: MutationObserver | null = null;
-let scanTimer: number | null = null;
-let registryTimer: number | null = null;
-let lastPluginSignature = "";
-
-function scheduleApply() {
-    if (scanTimer !== null)
-        window.clearTimeout(scanTimer);
-
-    scanTimer = window.setTimeout(() => {
-        scanTimer = null;
-        applyBuiltInVisibility();
-    }, 20);
-}
+type SignedTerm = {
+    sign: 1 | -1;
+    text: string;
+};
 
 const settings = definePluginSettings({
-    hideGift: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the Gift / Nitro gift button.",
-        default: true,
-        onChange: scheduleApply
-    },
-
-    hideApps: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the Apps / Activities button.",
-        default: true,
-        onChange: scheduleApply
-    },
-
-    hideGif: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the GIF picker button.",
-        default: false,
-        onChange: scheduleApply
-    },
-
-    hideStickers: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the sticker picker button.",
-        default: false,
-        onChange: scheduleApply
-    },
-
-    hideEmoji: {
-        type: OptionType.BOOLEAN,
-        description: "Hide the emoji picker button.",
-        default: false,
-        onChange: scheduleApply
-    },
-
-    hideUpload: {
-        type: OptionType.BOOLEAN,
+    increment: {
+        type: OptionType.NUMBER,
+        displayName: "Count increment",
         description:
-            "Hide Upload / More message options.",
-        default: false,
-        onChange: scheduleApply
+            "Amount added to the latest valid count.",
+        default: 1,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= -1_000_000 &&
+            value <= 1_000_000 ||
+            "Enter a whole number from -1,000,000 to 1,000,000."
     },
 
-    hideVoiceMessage: {
+    standardMaxLength: {
+        type: OptionType.NUMBER,
+        displayName: "Maximum length without Nitro",
+        description:
+            "Maximum generated expression length for accounts without Nitro.",
+        default: 1900,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 100 &&
+            value <= 2000 ||
+            "Enter a whole number from 100 to 2,000."
+    },
+
+    nitroMaxLength: {
+        type: OptionType.NUMBER,
+        displayName: "Maximum length with Nitro",
+        description:
+            "Maximum generated expression length when Nitro is detected.",
+        default: 4000,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 100 &&
+            value <= 4000 ||
+            "Enter a whole number from 100 to 4,000."
+    },
+
+    historySearchLimit: {
+        type: OptionType.NUMBER,
+        displayName: "History search limit",
+        description:
+            "Maximum number of loaded messages searched backward for a valid count.",
+        default: 500,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 10_000 ||
+            "Enter a whole number from 1 to 10,000."
+    },
+
+    maximumEquationInputLength: {
+        type: OptionType.NUMBER,
+        displayName: "Maximum equation input length",
+        description:
+            "Longest previous equation the plugin will attempt to solve.",
+        default: 10_000,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 100_000 ||
+            "Enter a whole number from 1 to 100,000."
+    },
+
+    multiplicationMaximum: {
+        type: OptionType.NUMBER,
+        displayName: "Multiplication number maximum",
+        description:
+            "Largest random number used in multiplication terms.",
+        default: 20,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 10_000 ||
+            "Enter a whole number from 1 to 10,000."
+    },
+
+    divisionDivisorMaximum: {
+        type: OptionType.NUMBER,
+        displayName: "Division divisor maximum",
+        description:
+            "Largest random divisor used in division terms.",
+        default: 12,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 10_000 ||
+            "Enter a whole number from 1 to 10,000."
+    },
+
+    divisionQuotientMaximum: {
+        type: OptionType.NUMBER,
+        displayName: "Division quotient maximum",
+        description:
+            "Largest random quotient used in division terms.",
+        default: 15,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 10_000 ||
+            "Enter a whole number from 1 to 10,000."
+    },
+
+    plainNumberMaximum: {
+        type: OptionType.NUMBER,
+        displayName: "Plain number maximum",
+        description:
+            "Largest random plain number used in cancellation terms.",
+        default: 100,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 1_000_000 ||
+            "Enter a whole number from 1 to 1,000,000."
+    },
+
+    targetSplitRange: {
+        type: OptionType.NUMBER,
+        displayName: "Target split range",
+        description:
+            "Maximum random offset used when hiding the target among terms.",
+        default: 250,
+        isValid: value =>
+            Number.isSafeInteger(value) &&
+            value >= 1 &&
+            value <= 1_000_000 ||
+            "Enter a whole number from 1 to 1,000,000."
+    },
+
+    stopWhenLatestCountIsYours: {
         type: OptionType.BOOLEAN,
-        description: "Hide the voice-message button.",
-        default: false,
-        onChange: scheduleApply
+        displayName: "Stop when latest count is yours",
+        description:
+            "Do not send when the most recent valid counting message was sent by you.",
+        default: true
     },
 
-    hidePoll: {
+    showSuccessMessage: {
         type: OptionType.BOOLEAN,
-        description: "Hide the poll button.",
-        default: false,
-        onChange: scheduleApply
-    },
-
-    pluginButtons: {
-        type: OptionType.COMPONENT,
-        component: PluginButtonSettings
+        displayName: "Show success notice",
+        description:
+            "Show a private confirmation after sending a count.",
+        default: false
     }
 });
 
-function normalize(value: string | null | undefined) {
-    return (value ?? "")
-        .replace(/\s+/g, " ")
-        .trim()
-        .toLowerCase();
+function randomInt(minimum: number, maximum: number) {
+    return Math.floor(
+        Math.random() * (maximum - minimum + 1)
+    ) + minimum;
 }
 
-function classifyLabel(label: string): BuiltInId | null {
-    const text = normalize(label);
+function choose<T>(items: T[]): T {
+    return items[randomInt(0, items.length - 1)];
+}
+
+function shuffle<T>(items: T[]): T[] {
+    for (let index = items.length - 1; index > 0; index--) {
+        const swapIndex = randomInt(0, index);
+
+        [items[index], items[swapIndex]] =
+            [items[swapIndex], items[index]];
+    }
+
+    return items;
+}
+
+function createMultiplication() {
+    const maximum =
+        settings.store.multiplicationMaximum;
+
+    const left = randomInt(1, maximum);
+    const right = randomInt(1, maximum);
+
+    return `(${left}*${right})`;
+}
+
+function createDivision() {
+    const divisor = randomInt(
+        1,
+        settings.store.divisionDivisorMaximum
+    );
+
+    const quotient = randomInt(
+        1,
+        settings.store.divisionQuotientMaximum
+    );
+
+    return `(${divisor * quotient}/${divisor})`;
+}
+
+function createPower() {
+    const exponent = choose([2, 2, 2, 3, 3, 4]);
+
+    const maximumBase =
+        exponent === 4 ? 4 :
+        exponent === 3 ? 5 :
+        12;
+
+    return `(${randomInt(2, maximumBase)}^${exponent})`;
+}
+
+function createSquareRoot() {
+    const root = randomInt(
+        1,
+        Math.max(
+            1,
+            Math.floor(Math.sqrt(
+                settings.store.plainNumberMaximum
+            ))
+        )
+    );
+
+    return `sqrt(${root * root})`;
+}
+
+function createPlainNumber() {
+    return String(
+        randomInt(
+            1,
+            settings.store.plainNumberMaximum
+        )
+    );
+}
+
+function createOperation() {
+    switch (choose([
+        "multiply",
+        "multiply",
+        "divide",
+        "power",
+        "power",
+        "sqrt",
+        "sqrt",
+        "number"
+    ])) {
+        case "multiply":
+            return createMultiplication();
+
+        case "divide":
+            return createDivision();
+
+        case "power":
+            return createPower();
+
+        case "sqrt":
+            return createSquareRoot();
+
+        default:
+            return createPlainNumber();
+    }
+}
+
+function createTargetTerms(target: number): SignedTerm[] {
+    const range = settings.store.targetSplitRange;
+
+    const method = choose([
+        "addition",
+        "subtraction",
+        "threeTerms",
+        "division"
+    ]);
+
+    if (method === "addition") {
+        const first = randomInt(-range, range);
+        const second = target - first;
+
+        return [
+            { sign: 1, text: String(first) },
+            { sign: 1, text: String(second) }
+        ];
+    }
+
+    if (method === "subtraction") {
+        const subtracted = randomInt(1, range);
+
+        return [
+            {
+                sign: 1,
+                text: String(target + subtracted)
+            },
+            {
+                sign: -1,
+                text: String(subtracted)
+            }
+        ];
+    }
+
+    if (method === "threeTerms") {
+        const first = randomInt(-range, range);
+        const second = randomInt(-range, range);
+        const third = target - first - second;
+
+        return [
+            { sign: 1, text: String(first) },
+            { sign: 1, text: String(second) },
+            { sign: 1, text: String(third) }
+        ];
+    }
+
+    const divisor = randomInt(
+        2,
+        Math.max(
+            2,
+            settings.store.divisionDivisorMaximum
+        )
+    );
+
+    const offset = randomInt(-range, range);
+    const numerator = (target - offset) * divisor;
+
+    return [
+        {
+            sign: 1,
+            text: `(${numerator}/${divisor})`
+        },
+        {
+            sign: 1,
+            text: String(offset)
+        }
+    ];
+}
+
+function createCancelingTerms(): SignedTerm[] {
+    const operation = createOperation();
+
+    return [
+        { sign: 1, text: operation },
+        { sign: -1, text: operation }
+    ];
+}
+
+function estimateLength(terms: SignedTerm[]) {
+    return terms.reduce((total, term, index) => {
+        const signLength =
+            index === 0 && term.sign === 1 ? 0 : 1;
+
+        return total + signLength + term.text.length;
+    }, 0);
+}
+
+function termsToExpression(terms: SignedTerm[]) {
+    return terms.map((term, index) => {
+        if (index === 0) {
+            return term.sign === -1
+                ? `-${term.text}`
+                : term.text;
+        }
+
+        return `${term.sign === -1 ? "-" : "+"}${term.text}`;
+    }).join("");
+}
+
+function buildExpression(
+    target: number,
+    maximumLength: number
+) {
+    const terms = createTargetTerms(target);
+
+    while (true) {
+        const pair = createCancelingTerms();
+        const candidate = [...terms, ...pair];
+
+        if (estimateLength(candidate) > maximumLength) {
+            break;
+        }
+
+        terms.push(...pair);
+    }
+
+    shuffle(terms);
+
+    const expression = termsToExpression(terms);
+    const result = evaluateExpression(expression);
+
+    if (result !== target) {
+        throw new Error(
+            "Generated expression did not verify."
+        );
+    }
+
+    return expression;
+}
+
+const SMALL_NUMBER_WORDS: Record<string, number> = {
+    zero: 0,
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+    ten: 10,
+    eleven: 11,
+    twelve: 12,
+    thirteen: 13,
+    fourteen: 14,
+    fifteen: 15,
+    sixteen: 16,
+    seventeen: 17,
+    eighteen: 18,
+    nineteen: 19,
+    twenty: 20,
+    thirty: 30,
+    forty: 40,
+    fifty: 50,
+    sixty: 60,
+    seventy: 70,
+    eighty: 80,
+    ninety: 90
+};
+
+const LARGE_NUMBER_WORDS: Record<string, number> = {
+    thousand: 1_000,
+    million: 1_000_000,
+    billion: 1_000_000_000,
+    trillion: 1_000_000_000_000,
+    quadrillion: 1_000_000_000_000_000
+};
+
+const NUMBER_WORD_PATTERN = new RegExp(
+    `\\b(?:${[
+        ...Object.keys(SMALL_NUMBER_WORDS),
+        "hundred",
+        ...Object.keys(LARGE_NUMBER_WORDS)
+    ].join("|")})(?:[\\s-]+(?:and[\\s-]+)?(?:${[
+        ...Object.keys(SMALL_NUMBER_WORDS),
+        "hundred",
+        ...Object.keys(LARGE_NUMBER_WORDS)
+    ].join("|")}))*\\b`,
+    "gi"
+);
+
+function parseNumberWords(words: string): number | null {
+    const tokens = words
+        .toLowerCase()
+        .replaceAll("-", " ")
+        .split(/\s+/)
+        .filter(token => token !== "and");
+
+    let total = 0;
+    let group = 0;
+
+    for (const token of tokens) {
+        const small = SMALL_NUMBER_WORDS[token];
+
+        if (small !== undefined) {
+            group += small;
+            continue;
+        }
+
+        if (token === "hundred") {
+            group = Math.max(1, group) * 100;
+            continue;
+        }
+
+        const scale = LARGE_NUMBER_WORDS[token];
+
+        if (scale !== undefined) {
+            total += Math.max(1, group) * scale;
+            group = 0;
+            continue;
+        }
+
+        return null;
+    }
+
+    const value = total + group;
+
+    return Number.isSafeInteger(value)
+        ? value
+        : null;
+}
+
+function normalizeNumberWords(content: string) {
+    return content.replace(
+        NUMBER_WORD_PATTERN,
+        match => {
+            const value = parseNumberWords(match);
+
+            return value === null
+                ? match
+                : String(value);
+        }
+    );
+}
+
+function normalizeSquareRoots(content: string) {
+    return content
+        .replace(/√\s*\(/g, "sqrt(")
+        .replace(/√\s*(-?\d+(?:\.\d+)?)/g, "sqrt($1)")
+        .replace(/\bsqrt\s+(-?\d+(?:\.\d+)?)/gi, "sqrt($1)");
+}
+
+function evaluateExpression(content: string): number | null {
+    const trimmed = content.trim();
 
     if (
-        text.includes("send a gift") ||
-        text.includes("give a gift") ||
-        text.includes("nitro gift") ||
-        text === "gift"
-    ) return "gift";
+        trimmed.length === 0 ||
+        trimmed.length >
+            settings.store.maximumEquationInputLength
+    ) {
+        return null;
+    }
 
-    if (
-        text === "apps" ||
-        text.includes("open apps") ||
-        text.includes("application launcher") ||
-        text.includes("activities") ||
-        text.includes("launch activity")
-    ) return "apps";
+    const normalized = normalizeSquareRoots(
+        normalizeNumberWords(trimmed.toLowerCase())
+    );
 
-    if (
-        text === "gif" ||
-        text.includes("gif picker") ||
-        text.includes("open gif") ||
-        text.includes("select a gif")
-    ) return "gif";
+    const withoutSquareRoots = normalized.replaceAll(
+        "sqrt",
+        ""
+    );
 
-    if (
-        text === "sticker" ||
-        text === "stickers" ||
-        text.includes("sticker picker") ||
-        text.includes("open sticker") ||
-        text.includes("select a sticker")
-    ) return "stickers";
+    if (!/^[0-9+\-*/().^\s]+$/.test(withoutSquareRoots)) {
+        return null;
+    }
 
-    if (
-        text === "emoji" ||
-        text === "emojis" ||
-        text === "add emoji" ||
-        text.includes("emoji picker") ||
-        text.includes("open emoji") ||
-        text.includes("select emoji")
-    ) return "emoji";
+    try {
+        const javascriptExpression = normalized
+            .replaceAll("^", "**")
+            .replaceAll("sqrt", "Math.sqrt");
 
-    if (
-        text === "more message options" ||
-        text.includes("upload a file") ||
-        text.includes("upload file") ||
-        text.includes("add attachment") ||
-        text.includes("attach file")
-    ) return "upload";
+        const value = Function(
+            `"use strict"; return (${javascriptExpression});`
+        )();
 
-    if (
-        text.includes("voice message") ||
-        text.includes("record voice")
-    ) return "voice";
+        if (
+            typeof value !== "number" ||
+            !Number.isFinite(value) ||
+            !Number.isSafeInteger(value)
+        ) {
+            return null;
+        }
 
-    if (
-        text === "poll" ||
-        text.includes("create poll")
-    ) return "poll";
+        return value;
+    } catch {
+        return null;
+    }
+}
+
+function getMostRecentCount(channelId: string) {
+    const messages =
+        MessageStore.getMessages(channelId)._array;
+
+    const minimumIndex = Math.max(
+        0,
+        messages.length -
+            settings.store.historySearchLimit
+    );
+
+    for (
+        let index = messages.length - 1;
+        index >= minimumIndex;
+        index--
+    ) {
+        const message = messages[index];
+
+        if (message.deleted) {
+            continue;
+        }
+
+        const value =
+            evaluateExpression(message.content);
+
+        if (value === null) {
+            continue;
+        }
+
+        return {
+            message,
+            value
+        };
+    }
 
     return null;
 }
 
-function shouldHide(id: BuiltInId) {
-    switch (id) {
-        case "gift":
-            return settings.store.hideGift;
-        case "apps":
-            return settings.store.hideApps;
-        case "gif":
-            return settings.store.hideGif;
-        case "stickers":
-            return settings.store.hideStickers;
-        case "emoji":
-            return settings.store.hideEmoji;
-        case "upload":
-            return settings.store.hideUpload;
-        case "voice":
-            return settings.store.hideVoiceMessage;
-        case "poll":
-            return settings.store.hidePoll;
-    }
+function hasNitro() {
+    const currentUser =
+        UserStore.getCurrentUser() as {
+            premiumType?: number;
+        };
+
+    return (currentUser.premiumType ?? 0) > 0;
 }
 
-function getButtonLabel(button: HTMLElement) {
-    const values: Array<string | null | undefined> = [
-        button.getAttribute("aria-label"),
-        button.getAttribute("title"),
-        button.getAttribute("data-name"),
-        button.getAttribute("data-testid"),
-        button.querySelector("svg")
-            ?.getAttribute("aria-label"),
-        button.querySelector("svg title")
-            ?.textContent
-    ];
+async function runCount(channelId: string) {
+    const latestCount =
+        getMostRecentCount(channelId);
 
-    const labelledBy =
-        button.getAttribute("aria-labelledby");
+    if (!latestCount) {
+        sendBotMessage(channelId, {
+            content:
+                "No valid counting message was found in the currently loaded channel history."
+        });
 
-    if (labelledBy) {
-        for (const id of labelledBy.split(/\s+/)) {
-            values.push(
-                document.getElementById(id)
-                    ?.textContent
-            );
-        }
+        return;
     }
 
-    return values
-        .filter(
-            (value): value is string =>
-                typeof value === "string" &&
-                value.trim().length > 0
-        )
-        .join(" ");
-}
-
-function getComposerEntries() {
-    const entries: Array<{
-        root: HTMLElement;
-        editor: HTMLElement;
-    }> = [];
-
-    const editors =
-        document.querySelectorAll<HTMLElement>(
-            [
-                '[contenteditable="true"][role="textbox"]',
-                'textarea[class*="textArea"]'
-            ].join(",")
-        );
-
-    for (const editor of editors) {
-        const root =
-            editor.closest<HTMLElement>(
-                '[class*="channelTextArea"]'
-            ) ??
-            editor.closest<HTMLElement>("form");
-
-        if (!root)
-            continue;
-
-        /*
-         * Settings and search fields can also be text boxes.
-         * A message composer contains several nearby icon buttons.
-         */
-        if (
-            root.querySelectorAll(
-                'button, [role="button"]'
-            ).length < 2
-        ) {
-            continue;
-        }
-
-        entries.push({ root, editor });
-    }
-
-    return entries;
-}
-
-function findLayoutWrapper(
-    button: HTMLElement,
-    root: HTMLElement,
-    editor: HTMLElement
-) {
-    const known = button.closest<HTMLElement>(
-        [
-            ".expression-picker-chat-input-button",
-            '[class*="buttonContainer"]'
-        ].join(",")
-    );
+    const currentUser =
+        UserStore.getCurrentUser();
 
     if (
-        known &&
-        root.contains(known) &&
-        !known.classList.contains(
-            "vc-chatbar-button"
-        )
+        settings.store.stopWhenLatestCountIsYours &&
+        latestCount.message.author.id ===
+            currentUser.id
     ) {
-        return known;
+        sendBotMessage(channelId, {
+            content:
+                "The latest valid counting message was sent by you, so nothing was sent."
+        });
+
+        return;
     }
 
-    let current: HTMLElement = button;
+    const nextValue =
+        latestCount.value +
+        settings.store.increment;
 
-    while (
-        current.parentElement &&
-        current.parentElement !== root
-    ) {
-        const parent = current.parentElement;
+    if (!Number.isSafeInteger(nextValue)) {
+        sendBotMessage(channelId, {
+            content:
+                "The next value would exceed JavaScript's safe integer range."
+        });
 
-        /*
-         * The button row contains multiple controls but
-         * does not contain the message editor itself.
-         */
-        if (
-            !parent.contains(editor) &&
-            parent.querySelectorAll(
-                'button, [role="button"]'
-            ).length >= 2
-        ) {
-            return current;
-        }
-
-        current = parent;
+        return;
     }
 
-    return button;
-}
+    const maximumLength =
+        hasNitro()
+            ? settings.store.nitroMaxLength
+            : settings.store.standardMaxLength;
 
-function restoreManagedElements() {
-    document
-        .querySelectorAll<HTMLElement>(
-            `[${MANAGED_ATTRIBUTE}]`
-        )
-        .forEach(element =>
-            element.removeAttribute(
-                MANAGED_ATTRIBUTE
-            )
+    const expression =
+        buildExpression(
+            nextValue,
+            maximumLength
         );
-}
 
-function applyBuiltInVisibility() {
-    restoreManagedElements();
+    await sendMessage(
+        channelId,
+        { content: expression }
+    );
 
-    for (
-        const { root, editor }
-        of getComposerEntries()
-    ) {
-        const seen = new Set<HTMLElement>();
-
-        const candidates =
-            root.querySelectorAll<HTMLElement>(
-                [
-                    "button",
-                    '[role="button"]',
-                    "[aria-label]",
-                    "[title]"
-                ].join(",")
-            );
-
-        for (const candidate of candidates) {
-            const button =
-                candidate.closest<HTMLElement>(
-                    'button, [role="button"]'
-                );
-
-            if (!button || seen.has(button))
-                continue;
-
-            seen.add(button);
-
-            /*
-             * Vencord/plugin buttons are controlled by
-             * Vencord's native settings below.
-             */
-            if (
-                button.closest(
-                    ".vc-chatbar-button"
-                )
-            ) {
-                continue;
-            }
-
-            const kind = classifyLabel(
-                getButtonLabel(button)
-            );
-
-            if (!kind || !shouldHide(kind))
-                continue;
-
-            findLayoutWrapper(
-                button,
-                root,
-                editor
-            ).setAttribute(
-                MANAGED_ATTRIBUTE,
-                "hidden"
-            );
-        }
+    if (settings.store.showSuccessMessage) {
+        sendBotMessage(channelId, {
+            content:
+                `Sent count ${nextValue} using ` +
+                `${expression.length} characters.`
+        });
     }
 }
 
-function PluginButtonSettings() {
-    const { chatBarButtons } = useSettings([
-        "uiElements.chatBarButtons.*"
-    ]).uiElements;
+const CountIcon: IconComponent = ({
+    height = 24,
+    width = 24,
+    className
+}) => (
+    <svg
+        width={width}
+        height={height}
+        className={className}
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+    >
+        <rect
+            x="4"
+            y="3"
+            width="16"
+            height="18"
+            rx="4"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+        />
+        <path
+            d="M8 7.5h8"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+        />
+        <path
+            d="M8 12h2M14 12h2M8 16h2M14 16h2"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+        />
+        <path
+            d="M18.6 2.7 19 4l1.3.4L19 4.8l-.4 1.3-.4-1.3-1.3-.4 1.3-.4.4-1.3Z"
+            fill="currentColor"
+        />
+    </svg>
+);
 
-    const [, forceUpdate] = useState(0);
-
-    const refresh = () =>
-        forceUpdate(value => value + 1);
-
-    useEffect(() => {
-        const timer = window.setInterval(
-            refresh,
-            750
-        );
-
-        return () =>
-            window.clearInterval(timer);
-    }, []);
-
-    const ids = [...ChatBarButtonMap.keys()]
-        .sort((left, right) =>
-            left.localeCompare(right)
-        );
+const CountChatBarButton: ChatBarButtonFactory = ({
+    channel,
+    disabled,
+    isMainChat
+}) => {
+    if (!isMainChat || disabled) {
+        return null;
+    }
 
     return (
-        <section style={{ marginTop: 20 }}>
-            <Forms.FormTitle tag="h3">
-                Plugin buttons
-            </Forms.FormTitle>
-
-            <Forms.FormText>
-                Controlled by Vencord's native reactive
-                chat-button settings.
-            </Forms.FormText>
-
-            {ids.length === 0 ? (
-                <Text
-                    variant="text-sm/normal"
-                    style={{ marginTop: 12 }}
-                >
-                    No plugin buttons are registered.
-                </Text>
-            ) : (
-                <div
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 0,
-                        marginTop: 12
-                    }}
-                >
-                    {ids.map(id => {
-                        const enabled =
-                            chatBarButtons[id]
-                                ?.enabled !== false;
-
-                        return (
-                            <FormSwitch
-                                key={id}
-                                title={id}
-                                note="Vencord plugin"
-                                value={enabled}
-                                onChange={nextEnabled => {
-                                    chatBarButtons[id] ??= {
-                                        enabled: true
-                                    };
-
-                                    chatBarButtons[id]
-                                        .enabled =
-                                        nextEnabled;
-
-                                    refresh();
-                                }}
-                            />
-                        );
-                    })}
-                </div>
-            )}
-        </section>
+        <ChatBarButton
+            tooltip="Send next count"
+            onClick={() =>
+                void runCount(channel.id)
+            }
+            buttonProps={{
+                "aria-label":
+                    "Send next count"
+            }}
+        >
+            <CountIcon />
+        </ChatBarButton>
     );
-}
-
-function checkPluginRegistry() {
-    const signature =
-        [...ChatBarButtonMap.keys()].join("\n");
-
-    if (signature === lastPluginSignature)
-        return;
-
-    lastPluginSignature = signature;
-}
+};
 
 export default definePlugin({
-    name: "Hide Chat Icons",
+    name: "Math Counter",
     description:
-        "Hide Discord and plugin chat icons.",
-    authors: [{
-        name: "NuzFlameV2",
-        id: 1248366351194652712n
-    }],
-    tags: ["Chat", "Customization"],
+        "Adds /count and a chat-bar button for sending the next randomized math count.",
+    authors: [
+        {
+            name: "NuzFlameV2",
+            id: 1248366351194652712n
+        }
+    ],
+    tags: [
+        "Chat",
+        "Commands",
+        "Utility"
+    ],
 
     settings,
 
-    start() {
-        const style =
-            document.createElement("style");
+    commands: [
+        {
+            name: "count",
+            description:
+                "Find the latest valid count and send the next math expression",
+            inputType:
+                ApplicationCommandInputType.BUILT_IN,
 
-        style.id = STYLE_ID;
-        style.textContent = STYLE;
-        document.head.appendChild(style);
+            async execute(_args, { channel }) {
+                await runCount(channel.id);
+            }
+        }
+    ],
 
-        observer = new MutationObserver(
-            scheduleApply
-        );
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: [
-                "aria-label",
-                "aria-labelledby",
-                "title"
-            ]
-        });
-
-        registryTimer = window.setInterval(
-            checkPluginRegistry,
-            750
-        );
-
-        applyBuiltInVisibility();
-    },
-
-    stop() {
-        observer?.disconnect();
-        observer = null;
-
-        if (scanTimer !== null)
-            window.clearTimeout(scanTimer);
-
-        if (registryTimer !== null)
-            window.clearInterval(registryTimer);
-
-        scanTimer = null;
-        registryTimer = null;
-        lastPluginSignature = "";
-
-        restoreManagedElements();
-
-        document
-            .getElementById(STYLE_ID)
-            ?.remove();
+    chatBarButton: {
+        icon: CountIcon,
+        render: CountChatBarButton
     }
 });
