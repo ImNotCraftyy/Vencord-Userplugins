@@ -1,0 +1,28 @@
+.vc-staff-crowns {
+    align-items: center;
+    color: var(--text-muted);
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 14px;
+    justify-content: center;
+    margin-left: 3px;
+    vertical-align: -2px;
+    width: 14px;
+}
+
+.vc-staff-crowns-profile {
+    height: 18px;
+    margin: 0;
+    vertical-align: middle;
+    width: 18px;
+}
+
+.vc-staff-crowns-icon {
+    display: block;
+    filter: drop-shadow(0 1px 1px rgb(0 0 0 / 35%));
+    overflow: visible;
+}
+
+.vc-staff-crowns-gold .vc-staff-crowns-icon {
+    filter: drop-shadow(0 0 2px currentcolor) drop-shadow(0 1px 1px rgb(0 0 0 / 35%));
+}
