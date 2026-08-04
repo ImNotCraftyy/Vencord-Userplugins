@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/vencordlogo.png" alt="Vencord Logo" width="160">
+![Vencord Logo](assets/vencordlogo.png)
 
 ## Nuz & Denji's Userplugins
 
