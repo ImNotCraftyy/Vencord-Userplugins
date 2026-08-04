@@ -4,8 +4,10 @@
 
 <h2 align="center">Nuz &amp; Denji's Userplugins</h2>
 
-Report bugs or request features through [GitHub Issues](https://github.com/NuzProjects/Vencord-Userplugins/issues).
-
+<p align="center">
+  Report bugs or request features through
+  <a href="https://github.com/NuzProjects/Vencord-Userplugins/issues">GitHub Issues</a>.
+</p>
 ---
 
 ## Installation
