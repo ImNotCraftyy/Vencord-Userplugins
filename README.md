@@ -43,7 +43,6 @@ Hides selected buttons from Discord's message composer.
 
 * Automatically detects any plugin buttons, allowing customization of every button imaginable.
 * Automatically hides Gift and Apps buttons
-*This plugin was partially ported from **BetterDiscord.***
 ---
 
 ### mathCount
@@ -96,7 +95,6 @@ Displays icons beside role mentions.
 
 * Adds role icons to mentions
 * Falls back to a default people icon
-*This plugin was ported from **BetterDiscord.***
 
 ---
 
