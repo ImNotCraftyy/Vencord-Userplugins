@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://www.image2url.com/r2/default/images/1785805581264-afd76f22-9fb5-4e44-9c28-2341944c00d8.png" alt="Banner" width="160">
+<img src="assets/vencordlogo.png" alt="Vencord Logo" width="160">
 
 ## Nuz & Denji's Userplugins
 
