@@ -1,7 +1,8 @@
+<p align="center">
+  <img src="https://www.image2url.com/r2/default/images/1785805581264-afd76f22-9fb5-4e44-9c28-2341944c00d8.png" alt="Banner" width="160">
+</p>
 
-# Nuz & Denji's Vencord Userplugins
-
-A collection of lightweight Userplugins created by **NuzFlameV2** and **ItsDenji777**.
+<h2 align="center">Nuz &amp; Denji's Userplugins</h2>
 
 Report bugs or request features through [GitHub Issues](https://github.com/NuzProjects/Vencord-Userplugins/issues).
 
@@ -29,6 +30,7 @@ pnpm inject
 ```text
 User Settings → Vencord → Plugins
 ```
+
 *For additional help, visit the [Official Documentation](https://docs.vencord.dev/installing/#installing-your-custom-build)*
 
 ---
@@ -43,9 +45,10 @@ Hides selected buttons from Discord's message composer.
 
 * Automatically detects any plugin buttons, allowing customization of every button imaginable.
 * Automatically hides Gift and Apps buttons
+
 ---
 
-### mathCount
+### Math Count
 
 Generates randomized math expressions for Discord counting servers.
 
@@ -70,7 +73,9 @@ Automatically reacts to messages from yourself or selected users.
 * Works in servers, DMs, and group DMs
 * Assign different reactions to selected users
 * Supports Unicode and custom emojis
+
 *This userplugin has a chance of getting you banned. Use at your own risk!*
+
 ---
 
 ### Staff Crowns
@@ -80,7 +85,7 @@ Adds a Crown/Tag to Server Owners (or Admins/Management)
 **Features:**
 
 * Crowns for Owners, Administrators, and Moderators
-* Individual display settings
+
 *This plugin was ported from **BetterDiscord.***
 
 ---
