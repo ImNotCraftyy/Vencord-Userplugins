@@ -54,6 +54,12 @@ User Settings → Vencord → Plugins
 
 Select individual icons to remove from view in the text field.
 
+### Preview
+
+<p align="center">
+  <img src="./assets/hidechaticons-preview.png" alt="Hide Chat Icons Preview" width="700">
+</p>
+
 ### Features
 
 - Automatically detects any plugin buttons, allowing customization of every button imaginable.
@@ -67,6 +73,12 @@ Generates randomized math expressions.
 
 > [!IMPORTANT]
 > The server must have math expressions enabled.
+
+### Preview
+
+<p align="center">
+  <img src="./assets/mathcount-preview.png" alt="Math Count Preview" width="700">
+</p>
 
 ### Features
 
@@ -100,6 +112,12 @@ Adds a Crown/Tag to Server Owners (or Admins/Management)
 > [!NOTE]
 > **BetterDiscord Port:** Ported from DevilBro's BetterDiscord `StaffTag` plugin.
 
+### Preview
+
+<p align="center">
+  <img src="./assets/staffcrowns-preview.png" alt="Staff Crowns Preview" width="700">
+</p>
+
 ### Features
 
 - Crowns for Owners, Administrators, and Moderators
@@ -112,6 +130,12 @@ Displays icons beside role mentions.
 
 > [!NOTE]
 > **BetterDiscord Port:** Ported from Neodymium's BetterDiscord `RoleMentionIcons` plugin.
+
+### Preview
+
+<p align="center">
+  <img src="./assets/rolementionicons-preview" alt="Role Mention Icons Preview" width="700">
+</p>
 
 ### Features
 
