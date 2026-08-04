@@ -144,6 +144,18 @@ Displays icons beside role mentions.
 
 ---
 
+### Quoter
+
+Right-click a message to quote your friends' wild statements.
+
+> [!NOTE]
+> **BetterDiscord Port:** Ported from Arven's BetterDiscord `Quoter` plugin.
+
+#### Features
+
+- Adds a quote button to quote anyone.
+- Easy settings to change all the options.
+
 ## Compatibility
 
 These plugins are intended for recent versions of:
