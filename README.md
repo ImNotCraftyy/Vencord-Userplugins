@@ -88,7 +88,7 @@ Automatically reacts to messages from yourself or selected users.
 Adds a Crown/Tag to Server Owners (or Admins/Management)
 
 > [!NOTE]
-> This plugin was ported from **BetterDiscord.**
+> **BetterDiscord Port:** Ported from DevilBro's BetterDiscord `StaffTag` plugin.
 
 ### Features
 
