@@ -1,25 +1,27 @@
-# Nuz & Denji's Userplugins
+# Nuz & Denji's Vencord Userplugins
 
-A collection of custom Vencord userplugins created by **NuzFlameV2 and ItsDenji777**.
+A collection of lightweight and configurable **Vencord userplugins** created by **NuzFlameV2** and **ItsDenji777**.
 
-These plugins are designed to add useful quality-of-life improvements to Discord while remaining lightweight, configurable, and easy to install.
-
-**Report all errors in [Issues](https://github.com/NuzProjects/Vencord-Userplugins-List/issues)**
+Report bugs or request features through [GitHub Issues](https://github.com/NuzProjects/Vencord-Userplugins/issues).
 
 ---
 
 ## Installation
 
 1. Clone or download this repository.
-2. Copy the desired plugin folder into:
-
-**If you are using Equicord, it is the same; the folder will just be called Equicord.**
+2. Copy the plugin folder you want into:
 
 ```text
 Vencord/src/userplugins/
 ```
 
-3. Rebuild Vencord:
+For Equicord, use:
+
+```text
+Equicord/src/userplugins/
+```
+
+3. Rebuild and inject:
 
 ```bash
 pnpm build
@@ -27,7 +29,7 @@ pnpm inject
 ```
 
 4. Restart Discord.
-5. Enable the plugin in:
+5. Enable the plugin under:
 
 ```text
 User Settings → Vencord → Plugins
@@ -39,79 +41,102 @@ User Settings → Vencord → Plugins
 
 ### Hide Chat Icons
 
-Hide any button in Discord's message composer.
+Hides selected buttons from Discord's message composer.
 
-#### Features
+**Features:**
 
-- Hide Discord's built-in chat buttons
-- Hide buttons added by other Vencord plugins
-- Gift and Apps hidden by default
-- Configure everything directly from Vencord Settings
-
-#### Discord Buttons
-
-- Gift
-- Apps / Activities
-- GIF
-- Stickers
-- Emoji
-- Upload
-- Voice Message
-- Poll
+* Supports Discord and Vencord-added buttons
+* Gift and Apps buttons are hidden by default
+* Configurable through Vencord settings
+* Supports Gift, Apps, GIF, Stickers, Emoji, Upload, Voice Message, and Poll
 
 ---
 
 ### mathCount
 
-Generate extremely long randomized math expressions for Discord counting servers.
-*This requires the counting setup to have math enabled!*
+Generates randomized math expressions for Discord counting servers.
 
-#### Features
+> The counting server must have math expressions enabled.
 
-- `/count` slash command
-- Chat-bar calculator button
-- Solves previous counting equations
-- Supports:
-  - `+`
-  - `-`
-  - `*`
-  - `/`
-  - `^`
-  - Parentheses
-- Automatically detects Nitro
-- Different maximum lengths for Nitro and non-Nitro users
-- Prevents double counting
-- Highly configurable generator
-- Randomized expression generation
+**Features:**
 
-#### Settings
-
-- Increment amount
-- Maximum equation length
-- Nitro message length
-- Search depth
-- Generator limits
-- Randomization settings
+* `/count` slash command
+* Chat-bar calculator button
+* Solves the previous counting equation
+* Supports addition, subtraction, multiplication, division, powers, and parentheses
+* Detects Nitro and adjusts message-length limits
+* Prevents double counting
+* Configurable expression generation
 
 ---
 
-## There will be more plugins coming soon!
+### Auto Reactor
+
+Automatically reacts to messages from yourself or selected users.
+
+**Features:**
+
+* Works in servers, DMs, and group DMs
+* Assign different reactions to selected users
+* Supports Unicode and custom emojis
+* Optional reactions to your own messages
+* Optional Super Reactions for Nitro users
+* Prevents duplicate reactions
+* Configurable channel support
+
+---
+
+### Staff Crowns
+
+Displays crowns beside server staff members.
+
+**Features:**
+
+* Gold crown for server owners
+* Silver crown for administrators
+* Bronze crown for moderators
+* Supports member-list decorations
+* Supports profile badges
+* Can ignore bot accounts
+* Individual display settings
+
+---
+
+### Role Mention Icons
+
+Displays icons beside role mentions.
+
+> **BetterDiscord Port:** Ported from Neodymium's BetterDiscord `RoleMentionIcons` plugin.
+
+**Features:**
+
+* Adds icons to role mentions
+* Supports `@everyone` and `@here`
+* Can display a role's custom icon
+* Falls back to a default people icon
+* Updates mentions automatically
+* Configurable without restarting Discord
+
 ---
 
 ## Compatibility
 
-These plugins are intended for recent versions of **Vencord** and **Discord Desktop**.
-***This also supports all modifications of Vencord such as Equicord***
+These plugins are intended for recent versions of:
 
-Discord occasionally changes its interface, so updates may be required after major Discord releases.
+* Vencord
+* Equicord and other Vencord-based forks
+* Discord Desktop
+
+Discord interface changes may occasionally require plugin updates.
 
 ---
 
 ## License
 
-All plugins in this repository are licensed under the **GNU General Public License v3.0 or later (GPL-3.0-or-later)**.
+All plugins are licensed under the **GNU General Public License v3.0 or later** (`GPL-3.0-or-later`).
 
 ---
-Updated `July 25, 2026`
 
-Created with 💙💜 by **NuzFlameV2 and ItsDenji777**
+**Last Updated:** August 3, 2026
+
+Created with 💙💜 by **NuzFlameV2** and **ItsDenji777**
