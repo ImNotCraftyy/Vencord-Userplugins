@@ -12,7 +12,7 @@ Report bugs or request features through <a href="https://github.com/NuzProjects/
 
 ---
 
-# Installation
+## Installation
 
 1. Clone or download this repository.
 2. Copy the plugin folder you want into:
@@ -40,7 +40,7 @@ User Settings → Vencord → Plugins
 
 ---
 
-# Plugins
+## Plugins
 
 ### Quick Navigation
 
@@ -52,7 +52,7 @@ User Settings → Vencord → Plugins
 
 ---
 
-## Hide Chat Icons
+### Hide Chat Icons
 
 Select individual icons to remove from view in the text field.
 
@@ -80,7 +80,7 @@ Generates randomized math expressions.
 
 ---
 
-## Auto Reactor
+### Auto Reactor
 
 Automatically reacts to messages from yourself or selected users.
 
@@ -95,7 +95,7 @@ Automatically reacts to messages from yourself or selected users.
 
 ---
 
-## Staff Crowns
+### Staff Crowns
 
 Adds a Crown/Tag to Server Owners (or Admins/Management)
 
@@ -108,7 +108,7 @@ Adds a Crown/Tag to Server Owners (or Admins/Management)
 
 ---
 
-## Role Mention Icons
+### Role Mention Icons
 
 Displays icons beside role mentions.
 
@@ -122,7 +122,7 @@ Displays icons beside role mentions.
 
 ---
 
-# Compatibility
+## Compatibility
 
 These plugins are intended for recent versions of:
 
