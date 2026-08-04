@@ -756,7 +756,7 @@ const CountChatBarButton: ChatBarButtonFactory = ({
 export default definePlugin({
     name: "Math Counter",
     description:
-        "Adds /count and a chat-bar button for sending the next randomized math count.",
+        "Generates randomized math expressions.",
     authors: [
         {
             name: "NuzFlameV2",
