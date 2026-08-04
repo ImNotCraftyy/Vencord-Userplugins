@@ -8,7 +8,6 @@
   Report bugs or request features through
   <a href="https://github.com/NuzProjects/Vencord-Userplugins/issues">GitHub Issues</a>.
 </p>
----
 
 ## Installation
 
