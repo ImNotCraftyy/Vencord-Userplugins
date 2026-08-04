@@ -33,7 +33,8 @@ pnpm inject
 User Settings → Vencord → Plugins
 ```
 
-*For additional help, visit the [Official Documentation](https://docs.vencord.dev/installing/#installing-your-custom-build).*
+> [!TIP]
+> For additional help, visit the [Official Documentation](https://docs.vencord.dev/installing/#installing-your-custom-build).
 
 ---
 
@@ -54,6 +55,7 @@ Select individual icons to remove from view in the text field.
 
 Generates randomized math expressions.
 
+> [!IMPORTANT]
 > The server must have math expressions enabled.
 
 ### Features
@@ -72,23 +74,25 @@ Automatically reacts to messages from yourself or selected users.
 
 ### Features
 
-- Works in servers, DMs, and group DMs.
-- Assign different reactions to selected users.
-- Supports Unicode and custom emojis.
+- Works in servers, DMs, and group DMs
+- Assign different reactions to selected users
+- Supports Unicode and custom emojis
 
-> **Warning:** This userplugin has a chance of getting you banned. Use at your own risk!
+> [!WARNING]
+> This userplugin has a chance of getting you banned. Use at your own risk!
 
 ---
 
 ## Staff Crowns
 
-Adds a Crown/Tag to Server Owners (or Admins/Management).
+Adds a Crown/Tag to Server Owners (or Admins/Management)
+
+> [!NOTE]
+> This plugin was ported from **BetterDiscord.**
 
 ### Features
 
-- Crowns for Owners, Administrators, and Moderators.
-
-> *This plugin was ported from **BetterDiscord.***
+- Crowns for Owners, Administrators, and Moderators
 
 ---
 
@@ -96,12 +100,13 @@ Adds a Crown/Tag to Server Owners (or Admins/Management).
 
 Displays icons beside role mentions.
 
+> [!NOTE]
 > **BetterDiscord Port:** Ported from Neodymium's BetterDiscord `RoleMentionIcons` plugin.
 
 ### Features
 
-- Adds role icons to mentions.
-- Falls back to a default people icon.
+- Adds role icons to mentions
+- Falls back to a default people icon
 
 ---
 
@@ -113,7 +118,8 @@ These plugins are intended for recent versions of:
 - Equicord and other Vencord-based forks
 - Discord Desktop
 
-Discord interface changes may occasionally require plugin updates.
+> [!CAUTION]
+> Discord interface changes may occasionally require plugin updates.
 
 ---
 
