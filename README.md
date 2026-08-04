@@ -131,12 +131,6 @@ Displays icons beside role mentions.
 > [!NOTE]
 > **BetterDiscord Port:** Ported from Neodymium's BetterDiscord `RoleMentionIcons` plugin.
 
-#### Preview
-
-<p align="center">
-  <img src="./assets/role-mention-icons-preview.png" alt="Role Mention Icons Preview" width="700">
-</p>
-
 #### Features
 
 - Adds role icons to mentions
