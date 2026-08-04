@@ -40,9 +40,7 @@ User Settings → Vencord → Plugins
 
 ---
 
-## Plugins
-
-### Quick Navigation
+## Quick Navigation
 
 - [Hide Chat Icons](#hide-chat-icons)
 - [Math Count](#math-count)
@@ -63,7 +61,7 @@ Select individual icons to remove from view in the text field.
 
 ---
 
-## Math Count
+### Math Count
 
 Generates randomized math expressions.
 
