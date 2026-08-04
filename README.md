@@ -134,7 +134,7 @@ Displays icons beside role mentions.
 ### Preview
 
 <p align="center">
-  <img src="./assets/rolementionicons-preview" alt="Role Mention Icons Preview" width="700">
+  <img src="./assets/rolementionsicons-preview" alt="Role Mention Icons Preview" width="700">
 </p>
 
 ### Features
