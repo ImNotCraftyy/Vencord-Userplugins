@@ -1,6 +1,7 @@
+
 # Nuz & Denji's Vencord Userplugins
 
-A collection of lightweight and configurable **Vencord userplugins** created by **NuzFlameV2** and **ItsDenji777**.
+A collection of lightweight Userplugins created by **NuzFlameV2** and **ItsDenji777**.
 
 Report bugs or request features through [GitHub Issues](https://github.com/NuzProjects/Vencord-Userplugins/issues).
 
@@ -13,12 +14,6 @@ Report bugs or request features through [GitHub Issues](https://github.com/NuzPr
 
 ```text
 Vencord/src/userplugins/
-```
-
-For Equicord, use:
-
-```text
-Equicord/src/userplugins/
 ```
 
 3. Rebuild and inject:
@@ -34,6 +29,7 @@ pnpm inject
 ```text
 User Settings → Vencord → Plugins
 ```
+*For additional help, visit the [Official Documentation](https://docs.vencord.dev/installing/#installing-your-custom-build)*
 
 ---
 
@@ -45,28 +41,24 @@ Hides selected buttons from Discord's message composer.
 
 **Features:**
 
-* Supports Discord and Vencord-added buttons
-* Gift and Apps buttons are hidden by default
-* Configurable through Vencord settings
-* Supports Gift, Apps, GIF, Stickers, Emoji, Upload, Voice Message, and Poll
-
+* Automatically detects any plugin buttons, allowing customization of every button imaginable.
+* Automatically hides Gift and Apps buttons
+*This plugin was partially ported from **BetterDiscord.***
 ---
 
 ### mathCount
 
 Generates randomized math expressions for Discord counting servers.
 
-> The counting server must have math expressions enabled.
+> The server must have math expressions enabled.
 
 **Features:**
 
-* `/count` slash command
+* `/count` command
 * Chat-bar calculator button
 * Solves the previous counting equation
-* Supports addition, subtraction, multiplication, division, powers, and parentheses
 * Detects Nitro and adjusts message-length limits
 * Prevents double counting
-* Configurable expression generation
 
 ---
 
@@ -79,26 +71,18 @@ Automatically reacts to messages from yourself or selected users.
 * Works in servers, DMs, and group DMs
 * Assign different reactions to selected users
 * Supports Unicode and custom emojis
-* Optional reactions to your own messages
-* Optional Super Reactions for Nitro users
-* Prevents duplicate reactions
-* Configurable channel support
-
+*This userplugin has a chance of getting you banned. Use at your own risk!*
 ---
 
 ### Staff Crowns
 
-Displays crowns beside server staff members.
+Adds a Crown/Tag to Server Owners (or Admins/Management)
 
 **Features:**
 
-* Gold crown for server owners
-* Silver crown for administrators
-* Bronze crown for moderators
-* Supports member-list decorations
-* Supports profile badges
-* Can ignore bot accounts
+* Crowns for Owners, Administrators, and Moderators
 * Individual display settings
+*This plugin was ported from **BetterDiscord.***
 
 ---
 
@@ -110,12 +94,9 @@ Displays icons beside role mentions.
 
 **Features:**
 
-* Adds icons to role mentions
-* Supports `@everyone` and `@here`
-* Can display a role's custom icon
+* Adds role icons to mentions
 * Falls back to a default people icon
-* Updates mentions automatically
-* Configurable without restarting Discord
+*This plugin was ported from **BetterDiscord.***
 
 ---
 
