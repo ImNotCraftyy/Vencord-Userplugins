@@ -42,6 +42,16 @@ User Settings → Vencord → Plugins
 
 # Plugins
 
+### Quick Navigation
+
+- [Hide Chat Icons](#hide-chat-icons)
+- [Math Count](#math-count)
+- [Auto Reactor](#auto-reactor)
+- [Staff Crowns](#staff-crowns)
+- [Role Mention Icons](#role-mention-icons)
+
+---
+
 ## Hide Chat Icons
 
 Select individual icons to remove from view in the text field.
