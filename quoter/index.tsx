@@ -265,7 +265,7 @@ const messageContextMenuPatch: NavContextMenuPatchCallback = (children, props: {
 
 export default definePlugin({
     name: "Quoter",
-    description: "Right click a message to quote your friends' wild statements.",
+    description: "Right-click a message to quote your friends' wild statements.",
     tags: ["Chat", "Fun"],
     authors: [{
         name: "NuzFlameV2",
