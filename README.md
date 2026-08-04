@@ -40,7 +40,7 @@ User Settings → Vencord → Plugins
 
 ### Hide Chat Icons
 
-Hides selected buttons from Discord's message composer.
+Select individual icons to remove from view in the text field.
 
 **Features:**
 
@@ -51,7 +51,7 @@ Hides selected buttons from Discord's message composer.
 
 ### Math Count
 
-Generates randomized math expressions for Discord counting servers.
+Generates randomized math expressions.
 
 > The server must have math expressions enabled.
 
