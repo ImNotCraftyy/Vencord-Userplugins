@@ -140,7 +140,7 @@ const profileBadge: ProfileBadge = {
 
 export default definePlugin({
     name: "Staff Crowns",
-    description: "Adds small Gold, Silver, and Bronze crowns to server owners, admins, and moderators.",
+    description: "Adds a Crown/Tag to Server Owners (or Admins/Management)",
     authors: [{ name: "NuzFlameV2", id: 1248366351194652712n }],
     settings,
     tags: ["Appearance", "Servers"],
