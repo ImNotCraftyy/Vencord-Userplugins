@@ -512,7 +512,7 @@ function checkPluginRegistry() {
 export default definePlugin({
     name: "Hide Chat Icons",
     description:
-        "Hide Discord and plugin chat icons.",
+        "Select individual icons to remove from view in the text field.",
     authors: [{
         name: "NuzFlameV2",
         id: 1248366351194652712n
