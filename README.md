@@ -5,7 +5,9 @@
 </p>
 
 ## Nuz & Denji's Userplugins
-
+<p align="center">
+  <img src="./assets/Denji_Nuz.png" alt="Creators" width="155">
+</p>
 Report bugs or request features through <a href="https://github.com/NuzProjects/Vencord-Userplugins/issues">GitHub Issues</a>.
 
 </div>
