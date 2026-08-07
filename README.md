@@ -6,7 +6,7 @@
 
 ## Nuz & Denji's Userplugins
 <p align="center">
-  <img src="./assets/Denji_Nuz.png" alt="Creators" width="155">
+  <img src="./assets/Denji_Nuz.png" alt="Creators" width="95">
 </p>
 Report bugs or request features through <a href="https://github.com/NuzProjects/Vencord-Userplugins/issues">GitHub Issues</a>.
 
@@ -145,18 +145,6 @@ Displays icons beside role mentions.
 - Falls back to a default people icon
 
 ---
-
-### Quoter
-
-Right-click a message to quote your friends' wild statements.
-
-> [!NOTE]
-> **BetterDiscord Port:** Ported from Arven's BetterDiscord `Quoter` plugin.
-
-#### Features
-
-- Adds a quote button to quote anyone.
-- Easy settings to change all the options.
 
 ## Compatibility
 
