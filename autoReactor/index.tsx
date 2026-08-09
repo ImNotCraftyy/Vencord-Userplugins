@@ -16,6 +16,12 @@ interface UserRule {
     reaction: string;
 }
 
+interface ChannelRule {
+    id: string;
+    channelId: string;
+    reaction: string;
+}
+
 interface DiscordMessage {
     id: string;
     channel_id: string;
@@ -40,6 +46,14 @@ function createRule(): UserRule {
     return {
         id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
         userId: "",
+        reaction: "👍"
+    };
+}
+
+function createChannelRule(): ChannelRule {
+    return {
+        id: crypto.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        channelId: "",
         reaction: "👍"
     };
 }
@@ -133,6 +147,77 @@ function UserRulesEditor() {
                             value={rule.userId}
                             placeholder={`User ${index + 1} ID`}
                             onChange={event => update(rule.id, { userId: event.currentTarget.value.replace(/\D/g, "") })}
+                        />
+                        <input
+                            style={inputStyle}
+                            value={rule.reaction}
+                            placeholder="👍 or emoji_name:ID"
+                            onChange={event => update(rule.id, { reaction: event.currentTarget.value })}
+                        />
+                        <button type="button" onClick={() => remove(rule.id)} style={removeButtonStyle}>Remove</button>
+                    </div>
+                ))}
+            </div>
+        </section>
+    );
+}
+
+function ChannelRulesEditor() {
+    const storedRules = settings.use(["channelRules"]).channelRules as ChannelRule[];
+    const [rules, setRules] = React.useState<ChannelRule[]>(() => Array.isArray(storedRules) ? storedRules : []);
+
+    const save = (next: ChannelRule[]) => {
+        setRules(next);
+        settings.store.channelRules = next;
+    };
+
+    const addChannel = () => save([...rules, createChannelRule()]);
+
+    const update = (id: string, patch: Partial<ChannelRule>) => {
+        save(rules.map(rule => rule.id === id ? { ...rule, ...patch } : rule));
+    };
+
+    const remove = (id: string) => save(rules.filter(rule => rule.id !== id));
+
+    return (
+        <section style={{ marginTop: 18 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 10 }}>
+                <div>
+                    <div style={{ fontWeight: 600, color: "var(--header-primary)" }}>Selected Channels</div>
+                    <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.4 }}>
+                        Add specific channels and Auto Reactor will react to messages sent by anyone in those channels.
+                    </div>
+                </div>
+                <button type="button" onClick={addChannel} style={primaryButtonStyle}>Add Channel</button>
+            </div>
+
+            {rules.length === 0 && (
+                <div style={{ padding: 13, border: "1px solid var(--background-modifier-accent)", borderRadius: 12, background: "var(--background-secondary)", color: "var(--text-muted)" }}>
+                    No selected channels yet.
+                </div>
+            )}
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+                {rules.map((rule, index) => (
+                    <div
+                        key={rule.id}
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "minmax(190px, 1fr) minmax(150px, 0.7fr) auto",
+                            gap: 9,
+                            alignItems: "center",
+                            padding: 11,
+                            border: "1px solid var(--background-modifier-accent)",
+                            borderRadius: 13,
+                            background: "var(--background-secondary)"
+                        }}
+                    >
+                        <input
+                            style={inputStyle}
+                            value={rule.channelId}
+                            placeholder={`Channel ${index + 1} ID`}
+                            inputMode="numeric"
+                            onChange={event => update(rule.id, { channelId: event.currentTarget.value.replace(/\D/g, "") })}
                         />
                         <input
                             style={inputStyle}
@@ -253,6 +338,14 @@ const settings = definePluginSettings({
     userRulesEditor: {
         type: OptionType.COMPONENT,
         component: UserRulesEditor
+    },
+    channelRules: {
+        type: OptionType.CUSTOM,
+        default: [] as ChannelRule[]
+    },
+    channelRulesEditor: {
+        type: OptionType.COMPONENT,
+        component: ChannelRulesEditor
     }
 });
 
@@ -328,6 +421,15 @@ function schedule(message: DiscordMessage, reaction: string) {
 function onMessageCreate(event: MessageCreateEvent) {
     const message = event.message;
     if (stopped || event.optimistic || !message?.id || !message.channel_id || !message.author?.id) return;
+
+    const channelRules = settings.store.channelRules as ChannelRule[];
+    const channelRule = channelRules.find(rule => rule.channelId.trim() === message.channel_id);
+
+    if (channelRule) {
+        const reaction = normalizeReaction(channelRule.reaction);
+        if (reaction && !alreadyReacted(message, reaction)) schedule(message, reaction);
+        return;
+    }
 
     const currentUserId = UserStore.getCurrentUser()?.id;
     if (!currentUserId) return;
