@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./style.css";
+import "./styles.css";
 
 import { BadgePosition, ProfileBadge } from "@api/Badges";
 import { definePluginSettings } from "@api/Settings";
@@ -141,7 +141,7 @@ const profileBadge: ProfileBadge = {
 export default definePlugin({
     name: "Staff Crowns",
     description: "Adds a Crown/Tag to Server Owners (or Admins/Management)",
-    authors: [{ name: "NuzFlameV2", id: 1248366351194652712n }],
+    authors: [{ name: "NuzFlameV2", id: 1248366351194652712n },{ name: "ItsDenji777", id: 876433011866992680n}],
     settings,
     tags: ["Appearance", "Servers"],
 
