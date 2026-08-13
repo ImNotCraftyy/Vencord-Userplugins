@@ -758,10 +758,7 @@ export default definePlugin({
     description:
         "Generates randomized math expressions.",
     authors: [
-        {
-            name: "NuzFlameV2",
-            id: 1248366351194652712n
-        }
+        {name: "NuzFlameV2", id: 1248366351194652712n},{ name: "ItsDenji777", id: 876433011866992680n}
     ],
     tags: [
         "Chat",

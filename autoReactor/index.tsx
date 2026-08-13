@@ -357,7 +357,7 @@ function onMessageCreate(event: MessageCreateEvent) {
 export default definePlugin({
     name: "Auto Reactor",
     description: "Automatically reacts to messages from yourself or selected users across servers, DMs, and group DMs.",
-    authors: [{ name: "NuzFlameV2", id: 1248366351194652712n }],
+    authors: [{ name: "NuzFlameV2", id: 1248366351194652712n},{ name: "ItsDenji777", id: 876433011866992680n}],
     settings,
 
     start() {

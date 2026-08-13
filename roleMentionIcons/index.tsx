@@ -147,11 +147,7 @@ export default definePlugin({
     name: "Role Mention Icons",
     description: "Displays icons next to role mentions.",
     tags: ["Appearance", "Chat", "Roles"],
-    authors: [{
-        name: "NuzFlameV2",
-        id: 1248366351194652712n
-    }],
-
+    authors: [{name: "NuzFlameV2", id: 1248366351194652712n},{ name: "ItsDenji777", id: 876433011866992680n}],
     settings,
     startAt: StartAt.DOMContentLoaded,
     requiresRestart: false,
