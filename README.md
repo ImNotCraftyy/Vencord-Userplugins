@@ -49,6 +49,8 @@ User Settings → Vencord → Plugins
 - [Auto Reactor](#auto-reactor)
 - [Staff Crowns](#staff-crowns)
 - [Role Mention Icons](#role-mention-icons)
+- [Fake Forward](#fake-forward)
+- [Lock Group](#lock-group)
 
 ---
 
