@@ -160,6 +160,8 @@ Send your chatbox text as a real forwarded message.
 > [!WARNING]
 > This userplugin has a chance of getting you banned. Use at your own risk!
 
+---
+
 ### Lock Group
 
 Locks group DM membership by kicking new recipients and re-adding removed recipients.
@@ -171,6 +173,8 @@ Locks group DM membership by kicking new recipients and re-adding removed recipi
   
 > [!WARNING]
 > This userplugin has a chance of getting you banned. Use at your own risk!
+
+---
 
 ### Artificial Intelligence
 
@@ -188,6 +192,8 @@ Summarize recent messages or ask AI questions using the current chat as context.
 - /ask to ask a question about up to 1000 messages of context
 - Settings to add your **FREE** [Mistral AI Key](https://console.mistral.ai/)
 
+---
+
 ## Compatibility
 
 These plugins are intended for recent versions of:
@@ -204,6 +210,9 @@ These plugins are intended for recent versions of:
 # License
 
 All plugins are licensed under the **GNU General Public License v3.0 or later** (`GPL-3.0-or-later`).
+
+> [!IMPORTANT]
+> The use of all these plugins is your choice. The developers of this collection claim no responsibility for any bans, suspensions, or warnings. 
 
 ---
 
