@@ -172,6 +172,21 @@ Locks group DM membership by kicking new recipients and re-adding removed recipi
 > [!WARNING]
 > This userplugin has a chance of getting you banned. Use at your own risk!
 
+### Artificial Intelligence
+
+Summarize recent messages or ask AI questions using the current chat as context.
+
+#### Preview
+
+<p align="center">
+  <img src="./assets/ai-preview.png" alt="AI preview" width="700">
+</p>
+
+#### Features
+
+- /summarize to summarize up to 1000 messages of context
+- /ask to ask a question about up to 1000 messages of context
+- Settings to add your **FREE** [Mistral AI Key](https://console.mistral.ai/)
 
 ## Compatibility
 
