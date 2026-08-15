@@ -158,6 +158,19 @@ Send your chatbox text as a real forwarded message.
 > [!WARNING]
 > This userplugin has a chance of getting you banned. Use at your own risk!
 
+### Lock Group
+
+Locks group DM membership by kicking new recipients and re-adding removed recipients.
+
+#### Features
+
+- One toggle to enable or disable locking
+- Automatically add, remove, or re-add users
+  
+> [!WARNING]
+> This userplugin has a chance of getting you banned. Use at your own risk!
+
+
 ## Compatibility
 
 These plugins are intended for recent versions of:
