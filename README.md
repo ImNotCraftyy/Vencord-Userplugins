@@ -146,6 +146,18 @@ Displays icons beside role mentions.
 
 ---
 
+### Fake Forward
+
+Send your chatbox text as a real forwarded message.
+
+#### Features
+
+- DM a User (preferably a bot), then forward to the channel.
+- Customize the UserID to DM.
+  
+> [!WARNING]
+> This userplugin has a chance of getting you banned. Use at your own risk!
+
 ## Compatibility
 
 These plugins are intended for recent versions of:
